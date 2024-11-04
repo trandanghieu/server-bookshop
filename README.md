@@ -38,3 +38,14 @@ spring boot 3
 | **GET**     | `/api/categories`                  |
 | **POST**    | `/api/categories`                  |
 | **GET**     | `/api/categories/search`           |
+
+
+##### Promotion
+| HTTP Method | Endpoint                           |
+|-------------|------------------------------------|
+| **GET**     | `/api/promotions/{id}`             |
+| **PUT**     | `/api/promotions/{id}`             |
+| **DELETE**  | `/api/promotions/{id}`             |
+| **GET**     | `	/api/promotions`                  |
+| **POST**    | `/api/promotions`                  |
+| **GET**     | `/api/promotions/search`           |
