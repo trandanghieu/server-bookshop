@@ -53,6 +53,6 @@ spring boot 3
 ##### Reviews
 HTTP Method | Endpoint
 ------------|---------
-POST        | /api/reviews
-GET         | /api/reviews/book/{bookId}
-DELETE      | /api/reviews/{id}
+POST        | `/api/reviews`
+GET         | `/api/reviews/book/{bookId}`
+DELETE      | `/api/reviews/{id}`
