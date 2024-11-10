@@ -46,6 +46,13 @@ spring boot 3
 | **GET**     | `/api/promotions/{id}`             |
 | **PUT**     | `/api/promotions/{id}`             |
 | **DELETE**  | `/api/promotions/{id}`             |
-| **GET**     | `	/api/promotions`                  |
+| **GET**     | `/api/promotions`                  |
 | **POST**    | `/api/promotions`                  |
 | **GET**     | `/api/promotions/search`           |
+
+##### Reviews
+HTTP Method | Endpoint
+------------|---------
+POST        | /api/reviews
+GET         | /api/reviews/book/{bookId}
+DELETE      | /api/reviews/{id}
