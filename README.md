@@ -56,3 +56,20 @@ HTTP Method | Endpoint
 POST        | `/api/reviews`
 GET         | `/api/reviews/book/{bookId}`
 DELETE      | `/api/reviews/{id}`
+
+##### Order
+| HTTP Method | Endpoint                     |
+|-------------|------------------------------|
+| PUT         | `/api/orders/{id}/status`      |
+| GET         | `/api/orders`                  |
+| POST        | `/api/orders`                  |
+| GET         | `/api/orders/{id}`             |
+| DELETE      | `/api/orders/{id}`            |
+| GET         | `/api/orders/user/{userId}`    |
+
+##### ShippingAddress
+| HTTP Method | Endpoint                                |
+|-------------|-----------------------------------------|
+| POST        | `/api/shipping-addresses`             |
+| GET         | `/api/shipping-addresses/user/{userId}`   |
+| DELETE      | `/api/shipping-addresses/{id}`            |
