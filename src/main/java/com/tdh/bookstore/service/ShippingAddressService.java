@@ -23,4 +23,8 @@ public class ShippingAddressService {
     public void deleteShippingAddress(Long id) {
         shippingAddressRepository.deleteById(id);
     }
+
+    public List<ShippingAddress> getAllShippingAddresses() {
+        return shippingAddressRepository.findAll();
+    }
 }

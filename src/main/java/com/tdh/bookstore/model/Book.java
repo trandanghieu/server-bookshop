@@ -41,6 +41,9 @@ public class Book {
     @JoinColumn(name = "categories_id", nullable = false)
     private ProductCategory categories;
 
+    @Column(columnDefinition = "TEXT")
+    private String preview;
+
     public Long getId() {
         return id;
     }
@@ -153,7 +156,7 @@ public class Book {
         if (bookType == BookType.ONLINE || bookType == BookType.AUDIO) {
             this.accessLink = accessLink;
         } else {
-            throw new IllegalArgumentException("Access link can only be set for online or audio books.");
+            this.accessLink = null;
         }
     }
 
@@ -169,6 +172,14 @@ public class Book {
         PRINT,
         ONLINE,
         AUDIO
+    }
+
+    public String getPreview() {
+        return preview;
+    }
+
+    public void setPreview(String preview) {
+        this.preview = preview;
     }
 
 }

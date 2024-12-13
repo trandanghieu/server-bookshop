@@ -39,4 +39,14 @@ public class BookController {
     public ResponseEntity<List<Book>> searchBooks(@RequestParam String title) {
         return ResponseEntity.ok(bookService.searchBooksByTitle(title));
     }
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<Book>> getBooksByCategory(@PathVariable Long categoryId) {
+        return ResponseEntity.ok(bookService.getBooksByCategoryId(categoryId));
+    }
+
+    @GetMapping("/user/{userId}/purchased")
+    public ResponseEntity<List<Book>> getBooksPurchasedByUser(@PathVariable Long userId) {
+        List<Book> purchasedBooks = bookService.getBooksByUserId(userId);
+        return ResponseEntity.ok(purchasedBooks);
+    }
 }
