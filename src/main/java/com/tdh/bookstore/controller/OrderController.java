@@ -1,12 +1,18 @@
 package com.tdh.bookstore.controller;
 
+import com.tdh.bookstore.dto.OrderItemDTO;
 import com.tdh.bookstore.model.Order;
+import com.tdh.bookstore.model.OrderItem;
+import com.tdh.bookstore.request.OrderRequestDTO;
+import com.tdh.bookstore.request.OrderStatusUpdateDTO;
+import com.tdh.bookstore.response.OrderResponseDTO;
 import com.tdh.bookstore.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -15,25 +21,31 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody Order order, @RequestParam Long shippingAddressId) {
-        return ResponseEntity.ok(orderService.createOrder(order, shippingAddressId));
+    public ResponseEntity<OrderResponseDTO> createOrder(@RequestBody OrderRequestDTO orderRequest) {
+        Order order = orderService.createOrder(orderRequest);
+        OrderResponseDTO response = convertToResponseDTO(order);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
+    public ResponseEntity<OrderResponseDTO> getOrderById(@PathVariable Long id) {
         return orderService.getOrderById(id)
-                .map(ResponseEntity::ok)
+                .map(order -> ResponseEntity.ok(convertToResponseDTO(order)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Order>> getOrdersByUserId(@PathVariable Long userId) {
-        return ResponseEntity.ok(orderService.getOrdersByUserId(userId));
+    public ResponseEntity<List<OrderResponseDTO>> getOrdersByUserId(@PathVariable Long userId) {
+        List<OrderResponseDTO> orders = orderService.getOrdersByUserId(userId);
+        return ResponseEntity.ok(orders);
     }
 
     @GetMapping
-    public ResponseEntity<List<Order>> getAllOrders() {
-        return ResponseEntity.ok(orderService.getAllOrders());
+    public ResponseEntity<List<OrderResponseDTO>> getAllOrders() {
+        List<OrderResponseDTO> orders = orderService.getAllOrders().stream()
+                .map(this::convertToResponseDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(orders);
     }
 
     @DeleteMapping("/{id}")
@@ -43,8 +55,33 @@ public class OrderController {
     }
 
     @PutMapping("/{id}/status")
-    public ResponseEntity<Order> updateOrderStatus(@PathVariable Long id, @RequestParam String status) {
-        Order updatedOrder = orderService.updateOrderStatus(id, status);
-        return updatedOrder != null ? ResponseEntity.ok(updatedOrder) : ResponseEntity.notFound().build();
+    public ResponseEntity<OrderResponseDTO> updateOrderStatus(@PathVariable Long id, @RequestBody OrderStatusUpdateDTO statusUpdate) {
+        Order updatedOrder = orderService.updateOrderStatus(id, statusUpdate.getStatus());
+        if (updatedOrder != null) {
+            OrderResponseDTO response = convertToResponseDTO(updatedOrder);
+            return ResponseEntity.ok(response);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    private OrderResponseDTO convertToResponseDTO(Order order) {
+        OrderResponseDTO responseDTO = new OrderResponseDTO();
+        responseDTO.setId(order.getId());
+        responseDTO.setUserId(order.getUser().getId());
+        responseDTO.setItems(order.getItems().stream().map(this::convertToOrderItemDTO).collect(Collectors.toList()));
+        responseDTO.setTotalAmount(order.getTotalAmount());
+        responseDTO.setStatus(order.getStatus());
+        responseDTO.setDescription(order.getDescription());
+        responseDTO.setShippingAddressId(order.getShippingAddress().getId());
+        responseDTO.setPaymentMethod(order.getPaymentMethod());
+        responseDTO.setCreatedAt(order.getCreatedAt());
+        return responseDTO;
+    }
+
+    private OrderItemDTO convertToOrderItemDTO(OrderItem orderItem) {
+        OrderItemDTO itemDTO = new OrderItemDTO();
+        itemDTO.setBookId(orderItem.getBook().getId());
+        itemDTO.setQuantity(orderItem.getQuantity());
+        return itemDTO;
     }
 }

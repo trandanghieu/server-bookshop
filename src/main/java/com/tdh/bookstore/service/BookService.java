@@ -13,12 +13,18 @@ public class BookService {
     @Autowired
     private BookRepository repository;
 
+    @Autowired
+    private OrderService orderService;
+
     public Book addBook(Book book) {
         return repository.save(book);
     }
 
     public Book updateBook(Long id, Book book) {
         book.setId(id);
+        if (book.getBookType() == Book.BookType.PRINT || book.getBookType() == Book.BookType.AUDIO) {
+            book.setAccessLink(null);
+        }
         return repository.save(book);
     }
 
@@ -36,6 +42,14 @@ public class BookService {
 
     public List<Book> searchBooksByTitle(String title) {
         return repository.findByTitleContaining(title);
+    }
+
+    public List<Book> getBooksByCategoryId(Long categoryId) {
+        return repository.findByCategoriesId(categoryId);
+    }
+
+    public List<Book> getBooksByUserId(Long userId) {
+        return orderService.getBooksByUserId(userId);
     }
 
 }

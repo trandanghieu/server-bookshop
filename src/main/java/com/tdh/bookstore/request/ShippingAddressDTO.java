@@ -1,35 +1,23 @@
-package com.tdh.bookstore.model;
+package com.tdh.bookstore.request;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.tdh.bookstore.util.UserDeserializer;
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "shipping_addresses")
-public class ShippingAddress {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ShippingAddressDTO {
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    @JsonDeserialize(using = UserDeserializer.class)
-    private User user;
-
-    @Column(nullable = false)
     private String addressLine;
-
-    @Column(nullable = false)
     private String city;
-
-    @Column(nullable = false)
     private String state;
-
-    @Column(nullable = false)
     private String postalCode;
-
-    @Column(nullable = false)
     private String country;
+    private Long userId;
+
+    public ShippingAddressDTO(Long id, String addressLine, String city, String state, String postalCode, String country, Long userId) {
+        this.id = id;
+        this.addressLine = addressLine;
+        this.city = city;
+        this.state = state;
+        this.postalCode = postalCode;
+        this.country = country;
+        this.userId = userId;
+    }
 
     public Long getId() {
         return id;
@@ -37,14 +25,6 @@ public class ShippingAddress {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public String getAddressLine() {
@@ -85,5 +65,13 @@ public class ShippingAddress {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }
